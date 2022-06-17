@@ -1,0 +1,33 @@
+name: "workstation"
+label: "Workstation"
+description: Workstation accessible via a web browser.
+logo: https://github.com/stackhpc/caas-repo2docker/raw/main/assets/jupyter.svg
+
+parameters:
+  - name: cluster_flavor
+    kind: cloud.size
+    label: Workstation Size
+    description: The size of the workstation.
+    immutable: true
+    options:
+      min_ram: 4096
+      min_disk: 10
+
+  - name: cluster_volume_size
+    label: "Volume size (GB)"
+    description: >-
+      The size of the data volume for the workstation.
+      The data volume will be available at /data.
+    kind: integer
+    default: 10
+    options:
+      min: 10
+    immutable: true
+
+usage_template: |-
+  The workstation can be accessed using a web browser from the services list.
+
+services:
+  - name: webconsole
+    label: Web console
+    icon_url: https://github.com/stackhpc/caas-repo2docker/raw/main/assets/jupyter.svg

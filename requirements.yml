@@ -1,0 +1,6 @@
+---
+
+collections:
+  - name: https://github.com/stackhpc/ansible-collection-terraform
+    type: git
+    version: c07b6cf85eb5e50441e4be9ff50fca85f08e8a00

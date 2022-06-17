@@ -1,0 +1,70 @@
+#####
+##### The identity scope we are operating in
+##### Used to add tge OpenStack user name to instance metadata
+#####
+data "openstack_identity_auth_scope_v3" "scope" {
+  name = "{{ cluster_name }}"
+}
+
+#####
+##### Security groups
+#####
+
+# Security group to hold rules for the node
+resource "openstack_networking_secgroup_v2" "cluster_secgroup" {
+  name                 = "{{ cluster_name }}-{{ cluster_type }}"
+  delete_default_rules = true   # Fully manage with terraform
+}
+
+# Allow all egress
+resource "openstack_networking_secgroup_rule_v2" "cluster_egress_v4" {
+  direction         = "egress"
+  ethertype         = "IPv4"
+  security_group_id = "${openstack_networking_secgroup_v2.cluster_secgroup.id}"
+}
+
+#####
+##### Cluster nodes
+#####
+
+resource "openstack_blockstorage_volume_v2" "cluster_volume" {
+  name        = "{{ cluster_name }}-{{ cluster_type }}"
+  size        = "{{ cluster_volume_size }}"
+}
+
+resource "openstack_compute_instance_v2" "cluster_server" {
+  name      = "{{ cluster_name }}-{{ cluster_type }}"
+  image_id  = "{{ cluster_previous_image | default(cluster_image) }}"
+  flavor_id = "{{ cluster_flavor }}"
+
+  network {
+    name = "{{ cluster_network }}"
+  }
+
+  security_groups = ["${openstack_networking_secgroup_v2.cluster_secgroup.name}"]
+
+  # Use cloud-init to inject the user's SSH key
+  user_data = <<-EOF
+    #cloud-config
+    ssh_authorized_keys:
+      - {{ cluster_user_ssh_public_key }}
+  EOF
+   
+  metadata = {
+    azimuth_apps_registrar_url = "{{ zenith_registrar_url }}"
+    azimuth_apps_registrar_token = "{{ zenith_token_webconsole }}"
+    azimuth_apps_sshd_host = "{{ zenith_sshd_host }}"
+    azimuth_apps_sshd_port = "{{ zenith_sshd_port }}"
+    azimuth_web_console_enabled = "1"
+    azimuth_cloud_name = "notused"
+    azimuth_user_name = "${data.openstack_identity_auth_scope_v3.scope.user_name}"
+    azimuth_user_id = "${data.openstack_identity_auth_scope_v3.scope.user_id}"
+    azimuth_project_name = "${data.openstack_identity_auth_scope_v3.scope.project_name}"
+    azimuth_project_id = "${data.openstack_identity_auth_scope_v3.scope.project_id}"
+  }
+}
+
+resource "openstack_compute_volume_attach_v2" "cluster_server_volume" {
+  instance_id = "${openstack_compute_instance_v2.cluster_server.id}"
+  volume_id   = "${openstack_blockstorage_volume_v2.cluster_volume.id}"
+}
