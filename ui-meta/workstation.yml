@@ -1,7 +1,7 @@
 name: "workstation"
 label: "Linux Workstation"
 description: Linux workstation (Ubuntu 20.04) accessible via a web browser.
-logo: https://en.wikipedia.org/wiki/Tux_%28mascot%29#/media/File:Tux_Classic_flat_look_3D.svg
+logo: https://raw.githubusercontent.com/stackhpc/caas-workstation/main/assets/tux.png
 
 parameters:
   - name: cluster_flavor
