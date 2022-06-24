@@ -24,13 +24,22 @@ resource "openstack_networking_secgroup_rule_v2" "cluster_egress_v4" {
 }
 
 #####
-##### Cluster nodes
+##### Cluster volumes
 #####
 
-resource "openstack_blockstorage_volume_v2" "cluster_volume" {
-  name        = "{{ cluster_name }}-{{ cluster_type }}"
-  size        = "{{ cluster_volume_size }}"
+resource "openstack_blockstorage_volume_v2" "zenith_volume" {
+  name = "{{ cluster_name }}-{{ cluster_type }}-zenith"
+  size = 1
 }
+
+resource "openstack_blockstorage_volume_v2" "data_volume" {
+  name = "{{ cluster_name }}-{{ cluster_type }}-data"
+  size = "{{ cluster_volume_size }}"
+}
+
+#####
+##### Cluster nodes
+#####
 
 resource "openstack_compute_instance_v2" "cluster_server" {
   name      = "{{ cluster_name }}-{{ cluster_type }}"
@@ -43,19 +52,21 @@ resource "openstack_compute_instance_v2" "cluster_server" {
 
   security_groups = ["${openstack_networking_secgroup_v2.cluster_secgroup.name}"]
 
-  # Use cloud-init to inject the user's SSH key
+{% if cluster_user_ssh_public_key is defined and cluster_user_ssh_public_key %}
   user_data = <<-EOF
     #cloud-config
     ssh_authorized_keys:
       - {{ cluster_user_ssh_public_key }}
   EOF
+{% endif %}
    
   metadata = {
-    azimuth_apps_registrar_url = "{{ zenith_registrar_url }}"
-    azimuth_apps_registrar_token = "{{ zenith_token_webconsole }}"
-    azimuth_apps_sshd_host = "{{ zenith_sshd_host }}"
-    azimuth_apps_sshd_port = "{{ zenith_sshd_port }}"
-    azimuth_web_console_enabled = "1"
+    zenith_volume_id = "${openstack_blockstorage_volume_v2.zenith_volume.id}"
+    data_volume_id = "${openstack_blockstorage_volume_v2.data_volume.id}"
+    zenith_registrar_url = "{{ zenith_registrar_url }}"
+    zenith_registrar_token = "{{ zenith_token_webconsole }}"
+    zenith_sshd_host = "{{ zenith_sshd_host }}"
+    zenith_sshd_port = "{{ zenith_sshd_port }}"
     azimuth_cloud_name = "notused"
     azimuth_user_name = "${data.openstack_identity_auth_scope_v3.scope.user_name}"
     azimuth_user_id = "${data.openstack_identity_auth_scope_v3.scope.user_id}"
@@ -64,7 +75,12 @@ resource "openstack_compute_instance_v2" "cluster_server" {
   }
 }
 
-resource "openstack_compute_volume_attach_v2" "cluster_server_volume" {
+resource "openstack_compute_volume_attach_v2" "zenith_volume" {
   instance_id = "${openstack_compute_instance_v2.cluster_server.id}"
-  volume_id   = "${openstack_blockstorage_volume_v2.cluster_volume.id}"
+  volume_id   = "${openstack_blockstorage_volume_v2.zenith_volume.id}"
+}
+
+resource "openstack_compute_volume_attach_v2" "data_volume" {
+  instance_id = "${openstack_compute_instance_v2.cluster_server.id}"
+  volume_id   = "${openstack_blockstorage_volume_v2.data_volume.id}"
 }

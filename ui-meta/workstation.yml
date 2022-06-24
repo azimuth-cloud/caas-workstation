@@ -1,7 +1,7 @@
 name: "workstation"
-label: "Workstation"
-description: Workstation accessible via a web browser.
-logo: https://github.com/stackhpc/caas-repo2docker/raw/main/assets/jupyter.svg
+label: "Linux Workstation"
+description: Linux workstation (Ubuntu 20.04) accessible via a web browser.
+logo: https://en.wikipedia.org/wiki/Tux_%28mascot%29#/media/File:Tux_Classic_flat_look_3D.svg
 
 parameters:
   - name: cluster_flavor
@@ -30,4 +30,4 @@ usage_template: |-
 services:
   - name: webconsole
     label: Web console
-    icon_url: https://github.com/stackhpc/caas-repo2docker/raw/main/assets/jupyter.svg
+    icon_url: https://dyltqmyl993wv.cloudfront.net/assets/stacks/guacamole/img/guacamole-stack-220x234.png
