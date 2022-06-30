@@ -31,3 +31,7 @@ services:
   - name: webconsole
     label: Web console
     icon_url: https://dyltqmyl993wv.cloudfront.net/assets/stacks/guacamole/img/guacamole-stack-220x234.png
+  - name: monitoring
+    label: Monitoring
+    icon_url: https://raw.githubusercontent.com/cncf/artwork/master/projects/prometheus/icon/color/prometheus-icon-color.png
+
