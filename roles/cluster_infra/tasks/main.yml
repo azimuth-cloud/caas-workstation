@@ -1,5 +1,19 @@
 ---
 
+# Convert the floating IP id to an address for Terraform
+- block:
+    - name: Look up floating ip
+      stackhpc.terraform.os_floating_ip_info:
+        floating_ip: "{{ cluster_floating_ip }}"
+      register: cluster_floating_ip_info
+
+    - name: Set floating IP address fact
+      set_fact:
+        cluster_floating_ip_address: "{{ cluster_floating_ip_info.floating_ip.floating_ip_address }}"
+  when:
+    - cluster_floating_ip is defined
+    - cluster_floating_ip
+
 - name: Install Terraform binary
   include_role:
     name: stackhpc.terraform.install
