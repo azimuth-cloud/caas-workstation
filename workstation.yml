@@ -12,7 +12,10 @@
         follow_redirects: safe
       register: monitoring_uri
       changed_when: false
-      failed_when: monitoring_uri.status >= 500
+      failed_when: >-
+        monitoring_uri.status < 0 or
+        monitoring_uri.status == 404 or
+        monitoring_uri.status >= 500
       retries: 60
       delay: 10
       # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
@@ -27,7 +30,10 @@
         follow_redirects: safe
       register: webconsole_uri
       changed_when: false
-      failed_when: webconsole_uri.status >= 500
+      failed_when: >-
+        webconsole_uri.status < 0 or
+        webconsole_uri.status == 404 or
+        webconsole_uri.status >= 500
       retries: 60
       delay: 10
       # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
