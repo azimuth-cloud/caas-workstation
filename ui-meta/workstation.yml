@@ -19,7 +19,7 @@ parameters:
 
   - name: cluster_volume_size
     label: "Data volume size (GB)"
-    description: >-
+    description: |-
       The size of the data volume for the workstation.  
       The data volume will be available at `/data`.
     kind: integer
