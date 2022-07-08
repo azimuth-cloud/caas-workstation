@@ -1,0 +1,42 @@
+---
+
+- name: Provision infrastructure
+  hosts: openstack
+  roles:
+    - cluster_infra
+  post_tasks:
+    - name: Wait for Monitoring to become available
+      uri:
+        url: "http://{{ zenith_fqdn_monitoring }}"
+        method: GET
+        follow_redirects: safe
+      register: monitoring_uri
+      changed_when: false
+      failed_when: >-
+        monitoring_uri.status < 0 or
+        monitoring_uri.status == 404 or
+        monitoring_uri.status >= 500
+      retries: 60
+      delay: 10
+      # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
+      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
+      until: monitoring_uri.status not in [404, 503, -1]
+      when: (cluster_state | default('present')) == 'present'
+    
+    - name: Wait for webconsole to become available
+      uri:
+        url: "http://{{ zenith_fqdn_webconsole }}"
+        method: GET
+        follow_redirects: safe
+      register: webconsole_uri
+      changed_when: false
+      failed_when: >-
+        webconsole_uri.status < 0 or
+        webconsole_uri.status == 404 or
+        webconsole_uri.status >= 500
+      retries: 60
+      delay: 10
+      # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
+      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
+      until: webconsole_uri.status not in [404, 503, -1]
+      when: (cluster_state | default('present')) == 'present'
