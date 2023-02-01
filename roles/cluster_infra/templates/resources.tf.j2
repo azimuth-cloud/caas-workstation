@@ -47,6 +47,9 @@ resource "openstack_blockstorage_volume_v3" "zenith_volume" {
 resource "openstack_blockstorage_volume_v3" "data_volume" {
   name = "{{ cluster_name }}-{{ cluster_type }}-data"
   size = "{{ cluster_volume_size }}"
+  {% if use_cluster_volume_type_fast and cluster_volume_type_fast is defined %}
+  volume_type = "{{ cluster_volume_type_fast }}"
+  {% endif %}
 }
 
 #####
