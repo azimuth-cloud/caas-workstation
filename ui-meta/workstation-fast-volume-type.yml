@@ -1,0 +1,61 @@
+name: "workstation"
+label: "Linux Workstation"
+description: Linux workstation (Ubuntu 20.04) accessible via a web browser.
+logo: https://raw.githubusercontent.com/stackhpc/caas-workstation/main/assets/tux.png
+
+# Workstations are deployed without an SSH key
+requires_ssh_key: false
+
+
+parameters:
+  - name: cluster_flavor
+    kind: cloud.size
+    label: Workstation Size
+    description: The size of the workstation.
+    immutable: true
+    options:
+      min_ram: 4096
+      min_disk: 10
+
+  - name: cluster_volume_size
+    label: "Data volume size (GB)"
+    description: |-
+      The size of the data volume for the workstation.  
+      The data volume will be available at `/data`.
+    kind: integer
+    default: 10
+    options:
+      min: 10
+    immutable: true
+  
+  - name: use_cluster_volume_type_fast
+    label: Provision high-performance storage for the data volume
+    description: |
+      If a high-performance storage type is available, use it for for the data
+      volume. If no high-performance storage type is available, this option has 
+      no effect and a standard cloud volume will be provisioned for data.
+    kind: boolean
+    required: false
+    default: true
+    options:
+      checkboxLabel: Put data volume on high-performance storage?
+
+usage_template: |-
+  {% set webconsole = cluster | service("webconsole") %}
+  {% set monitoring = cluster | service("monitoring") %}
+  This workstation can be accessed using a web browser via the [Web console service]({{ webconsole.url }}).
+
+  The data volume is mounted at `/data`, and content stored there will persist for the lifetime
+  of the workstation. Other parts of the filesystem may be affected during a patch operation,
+  including any packages that have been installed using `apt`.
+
+  Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
+
+
+services:
+  - name: webconsole
+    label: Web console
+    icon_url: https://dyltqmyl993wv.cloudfront.net/assets/stacks/guacamole/img/guacamole-stack-220x234.png
+  - name: monitoring
+    label: Monitoring
+    icon_url: https://raw.githubusercontent.com/cncf/artwork/master/projects/prometheus/icon/color/prometheus-icon-color.png
