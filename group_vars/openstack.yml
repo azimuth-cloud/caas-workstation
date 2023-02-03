@@ -10,7 +10,8 @@ terraform_backend_config_defaults:
   local: {}
 terraform_backend_config: "{{ terraform_backend_config_defaults[terraform_backend_type] }}"
 
-terraform_binary_directory: "{{ playbook_dir }}/bin"
+# it should pick it up from the docker image
+terraform_binary_directory: "/usr/local/bin"
 terraform_binary_path: "{{ terraform_binary_directory }}/terraform"
 terraform_project_path: "{{ playbook_dir }}/terraform"
 
