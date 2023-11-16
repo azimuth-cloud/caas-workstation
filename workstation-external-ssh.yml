@@ -5,10 +5,6 @@
   roles:
     - cluster_infra
   post_tasks:
-
-    - debug:
-        msg: test-1
-
     - name: Wait for Monitoring to become available
       uri:
         url: "http://{{ zenith_fqdn_monitoring }}"
@@ -44,20 +40,3 @@
       # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
       until: webconsole_uri.status not in [404, 503, -1]
       when: (cluster_state | default('present')) == 'present'
-
-    - debug:
-        msg: test-2
-
-    # Write the outputs as the final task
-    - debug: 
-        var: outputs
-      vars:
-        outputs: >-
-          {{-
-            { "cluster_access_ip": hostvars[groups['openstack'][0]].cluster_floating_ip_address }
-          }}
-
-- hosts: localhost
-  tasks:
-    debug:
-      msg: test-3
