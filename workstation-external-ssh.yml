@@ -41,9 +41,7 @@
       until: webconsole_uri.status not in [404, 503, -1]
       when: (cluster_state | default('present')) == 'present'
 
-# Write the outputs as the final task
-- hosts: localhost
-  tasks:
+    # Write the outputs as the final task
     - debug: var=outputs
       vars:
         # Ansible has a fit when there are two 'hostvars' evaluations in a resolution chain,
