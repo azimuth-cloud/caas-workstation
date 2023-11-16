@@ -44,8 +44,6 @@
     # Write the outputs as the final task
     - debug: var=outputs
       vars:
-        # Ansible has a fit when there are two 'hostvars' evaluations in a resolution chain,
-        # so we have to repeat logic here unfortunately
         outputs: >-
           {{-
             { "cluster_access_ip": hostvars[groups['openstack'][0]].cluster_floating_ip_address }
