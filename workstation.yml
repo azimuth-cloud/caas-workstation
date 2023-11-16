@@ -36,7 +36,7 @@
         webconsole_uri.status >= 500
       retries: 60
       delay: 10
-      # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
+      # 404, 500 and 503 are the statuses that are seen when the Zenith service is not ready yet
       # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
-      until: webconsole_uri.status not in [404, 503, -1]
+      until: webconsole_uri.status not in [404, 500, 503, -1]
       when: (cluster_state | default('present')) == 'present'
