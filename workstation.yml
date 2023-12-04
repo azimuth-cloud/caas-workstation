@@ -12,15 +12,16 @@
         follow_redirects: safe
       register: monitoring_uri
       changed_when: false
+      # The task fails if there is an error querying the endpoint
+      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
+      # A 404 is expected until the Zenith service has started
       failed_when: >-
         monitoring_uri.status < 0 or
         monitoring_uri.status == 404 or
         monitoring_uri.status >= 500
       retries: 60
       delay: 10
-      # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
-      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
-      until: monitoring_uri.status not in [404, 503, -1]
+      until: "monitoring_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
     
     - name: Wait for webconsole to become available
@@ -30,15 +31,16 @@
         follow_redirects: safe
       register: webconsole_uri
       changed_when: false
+      # The task fails if there is an error querying the endpoint
+      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
+      # A 404 is expected until the Zenith service has started
       failed_when: >-
         webconsole_uri.status < 0 or
         webconsole_uri.status == 404 or
         webconsole_uri.status >= 500
       retries: 60
       delay: 10
-      # 404 and 503 are the statuses that are seen when the Zenith service is not ready yet
-      # An SSL error is indicated as -1, which will occur while cert-manager fetches certificates
-      until: webconsole_uri.status not in [404, 503, -1]
+      until: "webconsole_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
 
 # Write the outputs as the final task
