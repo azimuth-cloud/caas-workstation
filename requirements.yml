@@ -10,4 +10,4 @@ collections:
 roles:
   - src: https://github.com/stackhpc/ansible-role-os-manila-mount.git
     name: stackhpc.os-manila-mount
-    version: feat/openstack-sdk # TODO: replace with release
+    version: feat/openstack-sdk-ubuntu # TODO: replace with release
