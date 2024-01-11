@@ -18,7 +18,7 @@ parameters:
       min_disk: 10
       has_properties:
         - name: hw:cpu_cores
-          # value: "2"
+          value: "2"
         - name: trait:CUSTOM_SKA_CPU_GENERAL
 
   - name: cluster_volume_size
