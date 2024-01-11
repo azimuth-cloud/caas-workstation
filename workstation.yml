@@ -54,7 +54,9 @@
         ansible_host: "{{ cluster_floating_ip_address }}"
         ansible_user: "{{ cluster_user.name }}"
         ansible_ssh_private_key_file: "{{ cluster_ssh_private_key_file }}"
-      when: cluster_floating_ip_address is defined and cluster_floating_ip_address
+      when:
+        - cluster_floating_ip_address is defined and cluster_floating_ip_address
+        - (cluster_state | default('present')) == 'present'
 
 - hosts: workstation # so requires FIP
   gather_facts: no
