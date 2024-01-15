@@ -17,6 +17,14 @@ parameters:
       min_ram: 4096
       min_disk: 10
 
+  - name: cluster_floating_ip
+    label: External IP for SSH access
+    description: |-
+      Attach an external IP to the workstation for access using SSH.
+    kind: cloud.ip
+    required: true
+    immutable: true
+
   - name: cluster_volume_size
     label: "Data volume size (GB)"
     description: |-
@@ -28,12 +36,12 @@ parameters:
       min: 10
     immutable: true
 
-  - name: cluster_floating_ip
-    label: External IP for SSH access
-    description: |-
-      Attach an external IP to the workstation for access using SSH.
-    kind: cloud.ip
-    required: true
+  # This field exists so that the Zenith volume can be accounted for in quota calculations
+  # It is hidden in the user form
+  - name: zenith_volume_size
+    kind: cloud.volume_size
+    hidden: true
+    default: 1
     immutable: true
 
 

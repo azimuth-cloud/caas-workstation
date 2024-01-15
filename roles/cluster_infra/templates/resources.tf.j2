@@ -41,7 +41,7 @@ resource "openstack_networking_secgroup_rule_v2" "cluster_ingress_ssh_v4" {
 
 resource "openstack_blockstorage_volume_v3" "zenith_volume" {
   name = "{{ cluster_name }}-{{ cluster_type }}-zenith"
-  size = 1
+  size = "{{ zenith_volume_size }}"
 }
 
 resource "openstack_blockstorage_volume_v3" "data_volume" {

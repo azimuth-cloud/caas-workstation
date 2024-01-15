@@ -40,6 +40,14 @@ parameters:
     options:
       checkboxLabel: Put data volume on high-performance storage?
 
+  # This field exists so that the Zenith volume can be accounted for in quota calculations
+  # It is hidden in the user form
+  - name: zenith_volume_size
+    kind: cloud.volume_size
+    hidden: true
+    default: 1
+    immutable: true
+
 usage_template: |-
   {% set webconsole = cluster | service("webconsole") %}
   {% set monitoring = cluster | service("monitoring") %}
