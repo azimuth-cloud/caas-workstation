@@ -71,19 +71,16 @@ resource "openstack_compute_instance_v2" "cluster_server" {
   user_data = <<-EOF
   #cloud-config
   user:
-    # create a new default-type user matching Slurm platform:
-    name: {{ cluster_user.name }}
-    uid: {{ cluster_user.uid }}
+    ssh_authorized_keys:
+      - {{ cluster_deploy_ssh_public_key }}
 {% if cluster_user_ssh_public_key is defined and cluster_user_ssh_public_key %}
+  users:
+  - name: azimuth
     ssh_authorized_keys:
       - {{ cluster_user_ssh_public_key }}
 {% endif %}
-  users:
-    # existing default-type user already created by cloud-init during packer build:
-    - name: ubuntu
-      ssh_authorized_keys:
-        - {{ cluster_deploy_ssh_public_key }}
   EOF
+
   metadata = {
     zenith_volume_id = "${openstack_blockstorage_volume_v3.zenith_volume.id}"
     data_volume_id = "${openstack_blockstorage_volume_v3.data_volume.id}"

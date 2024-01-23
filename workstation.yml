@@ -4,10 +4,6 @@
   hosts: openstack
   roles:
     - cluster_infra
-  vars:
-    cluster_user: # match azimuth user in slurm
-      name: azimuth
-      uid: 1005
   post_tasks:
     - name: Wait for Monitoring to become available
       uri:

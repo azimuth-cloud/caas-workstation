@@ -50,11 +50,11 @@ usage_template: |-
   {% set monitoring = cluster | service("monitoring") %}
   This workstation can be accessed using a web browser via the [Web console service]({{ webconsole.url }}) or by SSH.
 
-  The SSH key of the user that deployed the workstation is injected into the `ubuntu` user:
+  The SSH key of the user that deployed the workstation is injected into the `azimuth` user:
 
   ```
-  $ ssh ubuntu@{{ cluster.outputs.cluster_access_ip | default("[cluster ip]") }}
-  ubuntu@{{ cluster.name }}-workstation:~$
+  $ ssh azimuth@{{ cluster.outputs.cluster_access_ip | default("[cluster ip]") }}
+  azimuth@{{ cluster.name }}-workstation:~$
   ```
   
   The data volume is mounted at `/data`, and content stored there will persist for the lifetime
