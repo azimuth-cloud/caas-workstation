@@ -60,7 +60,7 @@ resource "openstack_blockstorage_volume_v3" "data_volume" {
 
 resource "openstack_compute_instance_v2" "cluster_server" {
   name      = "{{ cluster_name }}-{{ cluster_type }}"
-  image_id  = "{{ cluster_previous_image | default(cluster_image) }}"
+  image_id  = "{{ cluster_image }}"
   flavor_id = "{{ cluster_flavor }}"
 
   network {

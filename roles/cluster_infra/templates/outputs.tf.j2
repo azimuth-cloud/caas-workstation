@@ -1,5 +1,5 @@
 # This is used to determine the image to use unless explicitly patching
 output "cluster_image" {
   description = "The id of the image used to build the cluster nodes"
-  value       = "{{ cluster_previous_image | default(cluster_image) }}"
+  value       = "{{ cluster_image }}"
 }
