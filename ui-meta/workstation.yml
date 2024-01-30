@@ -22,10 +22,18 @@ parameters:
     description: |-
       The size of the data volume for the workstation.  
       The data volume will be available at `/data`.
-    kind: integer
+    kind: cloud.volume_size
     default: 10
     options:
       min: 10
+    immutable: true
+
+  # This field exists so that the Zenith volume can be accounted for in quota calculations
+  # It is hidden in the user form
+  - name: zenith_volume_size
+    kind: cloud.volume_size
+    hidden: true
+    default: 1
     immutable: true
 
 usage_template: |-
