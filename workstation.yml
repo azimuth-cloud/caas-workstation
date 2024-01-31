@@ -54,7 +54,7 @@
         - cluster_floating_ip_address is defined and cluster_floating_ip_address
         - (cluster_state | default('present')) == 'present'
 
-- hosts: workstation # so requires FIP
+- hosts: workstation # so only happens with FIP
   gather_facts: no
   become: yes
   vars:
@@ -68,7 +68,7 @@
     - name: Configure Manila project share
       include_role:
         name: stackhpc.os-manila-mount
-      when: cluster_project_manila_share | bool
+      when: cluster_project_manila_share | default(false) | bool
 
 # Write the outputs as the final task
 - hosts: localhost
