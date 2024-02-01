@@ -6,3 +6,9 @@ collections:
     version: c07b6cf85eb5e50441e4be9ff50fca85f08e8a00
   - name: openstack.cloud
     version: 1.8.0
+  - name: ansible.posix # for mount module
+
+roles:
+  - src: https://github.com/stackhpc/ansible-role-os-manila-mount.git
+    name: stackhpc.os-manila-mount
+    version: v24.1.1
