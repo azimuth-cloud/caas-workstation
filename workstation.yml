@@ -60,7 +60,7 @@
   vars:
     os_manila_mount_shares:
       - share_name: azimuth-project-share
-        share_user: "{{ cluster_project_manila_share_user }}"
+        share_user: "{{ cluster_project_manila_share_user | default(omit) }}"
         mount_path: /project
         mount_user: root
         mount_group: root
