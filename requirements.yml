@@ -3,7 +3,7 @@
 collections:
   - name: https://github.com/stackhpc/ansible-collection-terraform
     type: git
-    version: c07b6cf85eb5e50441e4be9ff50fca85f08e8a00
+    version: 0.2.0
   - name: openstack.cloud
     version: 1.8.0
   - name: ansible.posix # for mount module
