@@ -153,6 +153,20 @@ resource "openstack_compute_instance_v2" "cluster_server" {
     azimuth_user_id = "${data.openstack_identity_auth_scope_v3.scope.user_id}"
     azimuth_project_name = "${data.openstack_identity_auth_scope_v3.scope.project_name}"
     azimuth_project_id = "${data.openstack_identity_auth_scope_v3.scope.project_id}"
+    {% for playbook in ansible_init_playbooks %}
+      ansible_init_pb_{{ loop.index0 }}_name = "{{ playbook.name }}"
+      {% if playbook.stage is defined %}
+        ansible_init_pb_{{ loop.index0 }}_stage = "{{ playbook.stage }}"
+      {% endif %}
+    {% endfor %}
+    {% for collection in ansible_init_collections %}
+      ansible_init_coll_{{ loop.index0 }}_name = "{{ collection.name }}"
+      ansible_init_coll_{{ loop.index0 }}_type = "{{ collection.type }}"
+      ansible_init_coll_{{ loop.index0 }}_version = "{{ collection.version }}"
+      {% if collection.source is defined %}
+        ansible_init_coll_{{ loop.index0 }}_source = "{{ collection.source }}"
+      {% endif %}
+    {% endfor %} 
   }
 }
 
