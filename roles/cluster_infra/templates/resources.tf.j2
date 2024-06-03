@@ -76,7 +76,7 @@ data "openstack_networking_network_v2" "cluster_storage" {
 
 # Primary network
 resource "openstack_networking_port_v2" "cluster" {
-  name = "{{ cluster_name }}-0"
+  name = "{{ cluster_name }}"
   network_id = "${data.openstack_networking_network_v2.cluster_network.id}"
   admin_state_up = "true"
 
@@ -86,18 +86,13 @@ resource "openstack_networking_port_v2" "cluster" {
 
   binding {
     vnic_type = "{{ cluster_vnic_type | default('normal') }}"
-    {% if cluster_vnic_profile is defined %}
-    profile = <<EOF
-    {{ cluster_vnic_profile | to_json }}
-    EOF
-    {% endif %}
   }
 }
 
 # Storage network
 {% if cluster_storage_network is defined %}
 resource "openstack_networking_port_v2" "cluster_storage" {
-  name           = "{{ cluster_name }}-storage-0"
+  name           = "{{ cluster_name }}-storage"
   network_id     = data.openstack_networking_network_v2.cluster_storage.id
   admin_state_up = "true"
 
