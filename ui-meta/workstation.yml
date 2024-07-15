@@ -53,7 +53,7 @@ usage_template: |-
 services:
   - name: webconsole
     label: Web console
-    icon_url: https://dyltqmyl993wv.cloudfront.net/assets/stacks/guacamole/img/guacamole-stack-220x234.png
+    icon_url: https://raw.githubusercontent.com/apache/guacamole-website/main/images/logos/guac-classic-logo.svg
   - name: monitoring
     label: Monitoring
     icon_url: https://raw.githubusercontent.com/cncf/artwork/master/projects/prometheus/icon/color/prometheus-icon-color.png
