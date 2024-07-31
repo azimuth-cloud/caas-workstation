@@ -1,9 +1,9 @@
 ---
 
 collections:
-  - name: https://github.com/stackhpc/ansible-collection-terraform
+  - name: https://github.com/azimuth-cloud/ansible-collection-terraform
     type: git
-    version: 0.2.0
+    version: 0.3.0
   - name: openstack.cloud
     version: 1.8.0
   - name: ansible.posix # for mount module
