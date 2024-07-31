@@ -1,7 +1,7 @@
 name: "workstation"
 label: "Linux Workstation"
 description: Linux workstation (Ubuntu 22.04) accessible via a web browser.
-logo: https://raw.githubusercontent.com/stackhpc/caas-workstation/main/assets/tux.png
+logo: https://raw.githubusercontent.com/azimuth-cloud/caas-workstation/main/assets/tux.png
 
 # Workstations are deployed without an SSH key
 requires_ssh_key: false
@@ -47,7 +47,7 @@ usage_template: |-
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
 
-  Documentation on Workstation features such as EESSI and Podman can be found [here](https://stackhpc.github.io/azimuth-user-docs/platforms/linux-workstation/).
+  Documentation on Workstation features such as EESSI and Podman can be found [here](https://azimuth-cloud.github.io/azimuth-user-docs/platforms/linux-workstation/).
 
 
 services:

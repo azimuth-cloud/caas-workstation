@@ -3,7 +3,7 @@
 # Convert the floating IP id to an address for Terraform
 - block:
     - name: Look up floating ip
-      stackhpc.terraform.os_floating_ip_info:
+      azimuth_cloud.terraform.os_floating_ip_info:
         floating_ip: "{{ cluster_floating_ip }}"
       register: cluster_floating_ip_info
 
@@ -16,7 +16,7 @@
 
 - name: Install Terraform binary
   include_role:
-    name: stackhpc.terraform.install
+    name: azimuth_cloud.terraform.install
 
 - name: Make Terraform project directory
   file:
