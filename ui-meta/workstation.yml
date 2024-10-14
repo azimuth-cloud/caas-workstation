@@ -51,6 +51,7 @@ usage_template: |-
 
 
 services:
+  - name: ssh
   - name: webconsole
     label: Web console
     icon_url: https://raw.githubusercontent.com/apache/guacamole-website/main/images/logos/guac-classic-logo.svg
