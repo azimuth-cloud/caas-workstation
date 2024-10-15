@@ -45,6 +45,35 @@
     - providers.tf
     - resources.tf
 
+- name: Find terraform outputs, just to initi tofu state
+  azimuth_cloud.terraform.terraform_output:
+    project_path: "{{ terraform_project_path }}"
+    binary_path: "{{ terraform_binary_path }}"
+    backend_config_files:
+      - "{{ terraform_project_path }}/backend_config.json"
+  when:
+    - azimuth_update_reason is defined
+    - azimuth_update_reason == 'patch'
+
+- name: Terraform look at the current state list
+  ansible.builtin.command: "{{ terraform_binary_path }} state list"
+  args:
+    chdir: "{{ terraform_project_path }}"
+  when:
+    - azimuth_update_reason is defined
+    - azimuth_update_reason == 'patch'
+  register: terraform_state_list
+
+- name: Taint all servers if this is a patch update
+  ansible.builtin.command: "{{ terraform_binary_path }} taint openstack_compute_instance_v2.cluster_server"
+  args:
+    chdir: "{{ terraform_project_path }}"
+  with_items: "{{ terraform_state_list.stdout_lines }}"
+  when:
+    - azimuth_update_reason is defined
+    - azimuth_update_reason == 'patch'
+    - item is match("openstack_compute_instance_v2..*")
+
 - name: Provision infrastructure
   community.general.terraform:
     binary_path: "{{ terraform_binary_path }}"
