@@ -46,11 +46,5 @@
     - resources.tf
 
 - name: Provision infrastructure
-  community.general.terraform:
-    binary_path: "{{ terraform_binary_path }}"
-    project_path: "{{ terraform_project_path }}"
-    state: "{{ terraform_state }}"
-    backend_config_files:
-      - "{{ terraform_project_path }}/backend_config.json"
-    force_init: yes
-    init_reconfigure: yes
+  include_role:
+    name: azimuth_cloud.terraform.infra
