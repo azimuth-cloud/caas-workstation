@@ -110,6 +110,49 @@ resource "openstack_networking_port_v2" "cluster_storage" {
 ##### Cluster nodes
 #####
 
+# Declare a local value based on the metadata, so we can trigger a rebuild from it
+# By default, changing the metadata just updates the metadata on the current instance
+# However because of how we use metadata, we want to trigger a rebuild
+locals {
+  instance_metadata = {
+    zenith_volume_id = "${openstack_blockstorage_volume_v3.zenith_volume.id}"
+    data_volume_id = "${openstack_blockstorage_volume_v3.data_volume.id}"
+    zenith_registrar_url = "{{ zenith_registrar_url }}"
+    zenith_registrar_token_ssh = "{{ zenith_token_ssh }}"
+    zenith_registrar_token_webconsole = "{{ zenith_token_webconsole }}"
+    zenith_registrar_token_monitoring = "{{ zenith_token_monitoring }}"
+    zenith_fqdn_webconsole = "{{ zenith_fqdn_webconsole }}"
+    zenith_fqdn_monitoring = "{{ zenith_fqdn_monitoring }}"
+    zenith_sshd_host = "{{ zenith_sshd_host }}"
+    zenith_sshd_port = "{{ zenith_sshd_port }}"
+    azimuth_cloud_name = "notused"
+    azimuth_user_name = "${data.openstack_identity_auth_scope_v3.scope.user_name}"
+    azimuth_user_id = "${data.openstack_identity_auth_scope_v3.scope.user_id}"
+    azimuth_project_name = "${data.openstack_identity_auth_scope_v3.scope.project_name}"
+    azimuth_project_id = "${data.openstack_identity_auth_scope_v3.scope.project_id}"
+    {% for playbook in ansible_init_playbooks %}
+    ansible_init_pb_{{ loop.index0 }}_name = "{{ playbook.name }}"
+    {% if playbook.stage is defined %}
+    ansible_init_pb_{{ loop.index0 }}_stage = "{{ playbook.stage }}"
+    {% endif %}
+    {% endfor %}
+    {% for collection in ansible_init_collections %}
+    ansible_init_coll_{{ loop.index0 }}_name = "{{ collection.name }}"
+    ansible_init_coll_{{ loop.index0 }}_type = "{{ collection.type }}"
+    ansible_init_coll_{{ loop.index0 }}_version = "{{ collection.version }}"
+    {% if collection.source is defined %}
+    ansible_init_coll_{{ loop.index0 }}_source = "{{ collection.source }}"
+    {% endif %}
+    {% endfor %}
+  }
+}
+
+# A data resource that changes when the metadata changes
+# We can use this to trigger a rebuild of the server
+resource "terraform_data" "instance_metadata" {
+  input = local.instance_metadata
+}
+
 resource "openstack_compute_instance_v2" "cluster_server" {
   name      = "{{ cluster_name }}-{{ cluster_type }}"
   image_id  = "{{ cluster_image }}"
@@ -138,35 +181,11 @@ resource "openstack_compute_instance_v2" "cluster_server" {
 {% endif %}
   EOF
 
-  metadata = {
-    zenith_volume_id = "${openstack_blockstorage_volume_v3.zenith_volume.id}"
-    data_volume_id = "${openstack_blockstorage_volume_v3.data_volume.id}"
-    zenith_registrar_url = "{{ zenith_registrar_url }}"
-    zenith_registrar_token_webconsole = "{{ zenith_token_webconsole }}"
-    zenith_registrar_token_monitoring = "{{ zenith_token_monitoring }}"
-    zenith_fqdn_webconsole = "{{ zenith_fqdn_webconsole }}"
-    zenith_fqdn_monitoring = "{{ zenith_fqdn_monitoring }}"
-    zenith_sshd_host = "{{ zenith_sshd_host }}"
-    zenith_sshd_port = "{{ zenith_sshd_port }}"
-    azimuth_cloud_name = "notused"
-    azimuth_user_name = "${data.openstack_identity_auth_scope_v3.scope.user_name}"
-    azimuth_user_id = "${data.openstack_identity_auth_scope_v3.scope.user_id}"
-    azimuth_project_name = "${data.openstack_identity_auth_scope_v3.scope.project_name}"
-    azimuth_project_id = "${data.openstack_identity_auth_scope_v3.scope.project_id}"
-    {% for playbook in ansible_init_playbooks %}
-      ansible_init_pb_{{ loop.index0 }}_name = "{{ playbook.name }}"
-      {% if playbook.stage is defined %}
-        ansible_init_pb_{{ loop.index0 }}_stage = "{{ playbook.stage }}"
-      {% endif %}
-    {% endfor %}
-    {% for collection in ansible_init_collections %}
-      ansible_init_coll_{{ loop.index0 }}_name = "{{ collection.name }}"
-      ansible_init_coll_{{ loop.index0 }}_type = "{{ collection.type }}"
-      ansible_init_coll_{{ loop.index0 }}_version = "{{ collection.version }}"
-      {% if collection.source is defined %}
-        ansible_init_coll_{{ loop.index0 }}_source = "{{ collection.source }}"
-      {% endif %}
-    {% endfor %} 
+  metadata = local.instance_metadata
+
+  # Rebuild the server when the metadata changes
+  lifecycle {
+    replace_triggered_by = [terraform_data.instance_metadata]
   }
 }
 

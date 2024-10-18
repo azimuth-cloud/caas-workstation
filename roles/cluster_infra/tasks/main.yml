@@ -23,19 +23,6 @@
     path: "{{ terraform_project_path }}"
     state: directory
 
-- name: Write backend type configuration
-  copy:
-    content: |
-      terraform {
-        backend "{{ terraform_backend_type }}" { }
-      }
-    dest: "{{ terraform_project_path }}/backend.tf"
-
-- name: Write backend configuration options
-  copy:
-    content: "{{ terraform_backend_config | to_json }}"
-    dest: "{{ terraform_project_path }}/backend_config.json"
-
 - name: Template Terraform files into project directory
   template:
     src: "{{ item }}.j2"
@@ -46,11 +33,5 @@
     - resources.tf
 
 - name: Provision infrastructure
-  community.general.terraform:
-    binary_path: "{{ terraform_binary_path }}"
-    project_path: "{{ terraform_project_path }}"
-    state: "{{ terraform_state }}"
-    backend_config_files:
-      - "{{ terraform_project_path }}/backend_config.json"
-    force_init: yes
-    init_reconfigure: yes
+  include_role:
+    name: azimuth_cloud.terraform.infra
