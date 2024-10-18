@@ -186,7 +186,7 @@ resource "openstack_compute_instance_v2" "cluster_server" {
 
   # Rebuild the server when the metadata changes
   lifecycle {
-    replace_triggered_by = [terraform_data.replacement]
+    replace_triggered_by = [terraform_data.instance_metadata]
   }
 }
 
