@@ -148,6 +148,12 @@ locals {
   }
 }
 
+# A data resource that changes when the metadata changes
+# We can use this to trigger a rebuild of the server
+resource "terraform_data" "instance_metadata" {
+  input = local.instance_metadata
+}
+
 resource "openstack_compute_instance_v2" "cluster_server" {
   name      = "{{ cluster_name }}-{{ cluster_type }}"
   image_id  = "{{ cluster_image }}"
@@ -177,6 +183,11 @@ resource "openstack_compute_instance_v2" "cluster_server" {
   EOF
 
   metadata = local.instance_metadata
+
+  # Rebuild the server when the metadata changes
+  lifecycle {
+    replace_triggered_by = [terraform_data.replacement]
+  }
 }
 
 resource "openstack_compute_volume_attach_v2" "zenith_volume" {
