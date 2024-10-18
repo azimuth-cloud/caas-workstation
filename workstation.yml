@@ -43,18 +43,7 @@
       until: "webconsole_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
 
-    - name: Add instance to inventory
-      add_host:
-        name: "{{ cluster_name }}-{{ cluster_type }}"
-        groups: workstation
-        ansible_host: "{{ cluster_floating_ip_address }}"
-        ansible_user: ubuntu
-        ansible_ssh_private_key_file: "{{ cluster_ssh_private_key_file }}"
-      when:
-        - cluster_floating_ip_address is defined and cluster_floating_ip_address
-        - (cluster_state | default('present')) == 'present'
-
-- hosts: workstation # so only happens with FIP
+- hosts: workstation
   gather_facts: no
   become: yes
   vars:

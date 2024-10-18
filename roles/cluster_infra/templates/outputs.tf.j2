@@ -10,7 +10,7 @@ output "cluster_nodes" {
       {
         name   = openstack_compute_instance_v2.cluster_server.name
         ip     = openstack_networking_port_v2.cluster.all_fixed_ips[0]
-        groups = []
+        groups = ["workstation"]
         facts  = {}
       }
     ]
