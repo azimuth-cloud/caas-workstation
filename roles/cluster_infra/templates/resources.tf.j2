@@ -144,7 +144,7 @@ locals {
     ansible_init_coll_{{ loop.index0 }}_source = "{{ collection.source }}"
     {% endif %}
     {% endfor %}
-    trigger_rebuild = "1"
+    trigger_rebuild = "2"
   }
 }
 
