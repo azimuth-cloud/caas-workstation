@@ -53,6 +53,11 @@ usage_template: |-
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
 
+  This Azimuth user is mounted at {{ user_mountpoint }}/{{ azimuth_username }}-home
+
+  Note that this user storage is EPHEMERAL and is removed on platform deletion, use
+  /platform for persistent storage between workstations.
+
   Documentation on Workstation features such as EESSI and Podman can be found [here](https://azimuth-cloud.github.io/azimuth-user-docs/platforms/linux-workstation/).
 
 
