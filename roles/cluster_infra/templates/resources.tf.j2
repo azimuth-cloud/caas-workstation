@@ -142,6 +142,7 @@ resource "openstack_compute_instance_v2" "cluster_server" {
     zenith_volume_id = "${openstack_blockstorage_volume_v3.zenith_volume.id}"
     data_volume_id = "${openstack_blockstorage_volume_v3.data_volume.id}"
     zenith_registrar_url = "{{ zenith_registrar_url }}"
+    zenith_registrar_token_ssh = "{{ zenith_token_ssh }}"
     zenith_registrar_token_webconsole = "{{ zenith_token_webconsole }}"
     zenith_registrar_token_monitoring = "{{ zenith_token_monitoring }}"
     zenith_fqdn_webconsole = "{{ zenith_fqdn_webconsole }}"
