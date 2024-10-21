@@ -5,6 +5,16 @@
   roles:
     - cluster_infra
 
+
+- name: Write test file
+  hosts: workstation
+  gather_facts: yes
+  become: yes
+  tasks:
+    - copy:
+        content: "HELLO FROM ANSIBLE"
+        dest: /home/ubuntu/ansible-hello.txt
+
 - name: Configure project share
   hosts: workstation
   gather_facts: no
