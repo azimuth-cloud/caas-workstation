@@ -67,14 +67,14 @@ usage_template: |-
   $ ssh azimuth@{{ cluster.outputs.cluster_access_ip | default("[cluster ip]") }}
   azimuth@{{ cluster.name }}-workstation:~$
   ```
-  
+
   The data volume is mounted at `/data`, and content stored there will persist for the lifetime
   of the workstation.
-  
+
   If configured by the adminstrator, a project filesystem may be mounted at `/project`.
   Content stored there will be available to all such configured workstations and Slurm
   clusters, and will persist after deletion of workstations/clusters.
-  
+
   Other parts of the filesystem may be affected during a patch operation,
   including any packages that have been installed using `apt`.
 
@@ -84,6 +84,9 @@ usage_template: |-
 
 
 services:
+  - name: ssh
+    # This service is internal, i.e. the endpoints are not published via the API
+    internal: true
   - name: webconsole
     label: Web console
     icon_url: https://raw.githubusercontent.com/apache/guacamole-website/main/images/logos/guac-classic-logo.svg
