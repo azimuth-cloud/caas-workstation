@@ -1,5 +1,18 @@
-# This is used to determine the image to use unless explicitly patching
-output "cluster_image" {
-  description = "The id of the image used to build the cluster nodes"
-  value       = "{{ cluster_image }}"
+output "cluster_gateway_ip" {
+  description = "The address of the gateway used to contact the cluster nodes"
+  value       = "{{ zenith_internal_fqdn_ssh }}"
+}
+
+output "cluster_nodes" {
+  description = "A list of the nodes in the cluster, used to populate the Ansible inventory"
+  value       = concat(
+    [
+      {
+        name   = openstack_compute_instance_v2.cluster_server.name
+        ip     = openstack_networking_port_v2.cluster.all_fixed_ips[0]
+        groups = ["workstation"]
+        facts  = {}
+      }
+    ]
+  )
 }

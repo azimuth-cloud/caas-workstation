@@ -4,7 +4,28 @@
   hosts: openstack
   roles:
     - cluster_infra
-  post_tasks:
+
+- name: Configure project share
+  hosts: workstation
+  gather_facts: no
+  become: yes
+  vars:
+    os_manila_mount_shares:
+      - share_name: "{{ cluster_project_manila_share_name | default('azimuth-project-share') }}"
+        share_user: "{{ cluster_project_manila_share_user | default(omit) }}"
+        mount_path: /project
+        mount_user: root
+        mount_group: root
+        mount_mode: ugo=rwX
+  tasks:
+    - name: Configure Manila project share
+      include_role:
+        name: stackhpc.os-manila-mount
+      when: cluster_project_manila_share | default(false) | bool
+
+- name: Wait for Zenith services
+  hosts: openstack
+  tasks:
     - name: Wait for Monitoring to become available
       uri:
         url: "http://{{ zenith_fqdn_monitoring }}"
@@ -42,34 +63,6 @@
       delay: 10
       until: "webconsole_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
-
-    - name: Add instance to inventory
-      add_host:
-        name: "{{ cluster_name }}-{{ cluster_type }}"
-        groups: workstation
-        ansible_host: "{{ cluster_floating_ip_address }}"
-        ansible_user: ubuntu
-        ansible_ssh_private_key_file: "{{ cluster_ssh_private_key_file }}"
-      when:
-        - cluster_floating_ip_address is defined and cluster_floating_ip_address
-        - (cluster_state | default('present')) == 'present'
-
-- hosts: workstation # so only happens with FIP
-  gather_facts: no
-  become: yes
-  vars:
-    os_manila_mount_shares:
-      - share_name: "{{ cluster_project_manila_share_name | default('azimuth-project-share') }}"
-        share_user: "{{ cluster_project_manila_share_user | default(omit) }}"
-        mount_path: /project
-        mount_user: root
-        mount_group: root
-        mount_mode: ugo=rwX
-  tasks:
-    - name: Configure Manila project share
-      include_role:
-        name: stackhpc.os-manila-mount
-      when: cluster_project_manila_share | default(false) | bool
 
 # Write the outputs as the final task
 - hosts: localhost

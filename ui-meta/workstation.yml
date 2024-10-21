@@ -42,7 +42,13 @@ usage_template: |-
   This workstation can be accessed using a web browser via the [Web console service]({{ webconsole.url }}).
 
   The data volume is mounted at `/data`, and content stored there will persist for the lifetime
-  of the workstation. Other parts of the filesystem may be affected during a patch operation,
+  of the workstation.
+
+  If configured by the adminstrator, a project filesystem may be mounted at `/project`.
+  Content stored there will be available to all such configured workstations and Slurm
+  clusters, and will persist after deletion of workstations/clusters.
+
+  Other parts of the filesystem may be affected during a patch operation,
   including any packages that have been installed using `apt`.
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
@@ -51,6 +57,9 @@ usage_template: |-
 
 
 services:
+  - name: ssh
+    # This service is internal, i.e. the endpoints are not published via the API
+    internal: true
   - name: webconsole
     label: Web console
     icon_url: https://raw.githubusercontent.com/apache/guacamole-website/main/images/logos/guac-classic-logo.svg
