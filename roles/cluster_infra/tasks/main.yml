@@ -36,4 +36,4 @@
   include_role:
     name: azimuth_cloud.terraform.infra
   vars:
-    azimuth_update_reason: "{{ azimuth_update_reason | default('unknown') }}"
+    terraform_rebuild_appliance: "{{ azimuth_update_reason | default('unknown') }}"
