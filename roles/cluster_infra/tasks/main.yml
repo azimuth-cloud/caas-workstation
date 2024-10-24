@@ -35,3 +35,5 @@
 - name: Provision infrastructure
   include_role:
     name: azimuth_cloud.terraform.infra
+  vars:
+    azimuth_update_reason: "{{ azimuth_update_reason | default('unknown') }}"
