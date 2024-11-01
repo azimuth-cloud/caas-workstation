@@ -32,8 +32,13 @@
     - providers.tf
     - resources.tf
 
+- name: Set cluster to rebuild on patch
+  set_fact:
+    azimuth_rebuild_platform: true
+  when: azimuth_update_reason == "patch"
+
 - name: Provision infrastructure
   include_role:
     name: azimuth_cloud.terraform.infra
   vars:
-    terraform_rebuild_appliance: "{{ azimuth_update_reason | default('unknown') }}"
+    terraform_rebuild_nodes: "{{ azimuth_rebuild_platform | default(false) }}"
