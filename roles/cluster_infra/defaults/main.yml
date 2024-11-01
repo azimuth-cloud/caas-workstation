@@ -2,3 +2,5 @@ cluster_ssh_user: ubuntu
 
 ansible_init_collections: []
 ansible_init_playbooks: []
+
+azimuth_update_reason: reconfigure
