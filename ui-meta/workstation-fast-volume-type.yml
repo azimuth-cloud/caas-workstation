@@ -56,6 +56,9 @@ usage_template: |-
   The data volume is mounted at `/data`, and content stored there will persist for the lifetime
   of the workstation.
 
+  Note that this user storage (/home/azimuth) is EPHEMERAL and is removed on platform deletion, but is persistent
+  through platform patches. All system level changes outside of the home directory will be lost on a platform patch.
+
   If configured by the adminstrator, a project filesystem may be mounted at `/project`.
   Content stored there will be available to all such configured workstations and Slurm
   clusters, and will persist after deletion of workstations/clusters.
@@ -64,12 +67,6 @@ usage_template: |-
   including any packages that have been installed using `apt`.
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
-
-  Note that this user storage (/home/azimuth) is EPHEMERAL and is removed on platform deletion, but is persistent
-  through platform patches. All system level changes outside of the home directory will be lost on a platform patch.
-
-  When configured by the Azimuth operator, an additional filesystem is mounted at /project. This filesystem persists
-  after the platform is deleted and is shared with other platforms in the tenancy.
 
   Documentation on Workstation features such as EESSI and Podman can be found [here](https://azimuth-cloud.github.io/azimuth-user-docs/platforms/linux-workstation/).
 
