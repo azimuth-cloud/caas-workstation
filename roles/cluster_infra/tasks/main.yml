@@ -35,3 +35,5 @@
 - name: Provision infrastructure
   include_role:
     name: azimuth_cloud.terraform.infra
+  vars:
+    terraform_rebuild_nodes: "{{ azimuth_update_reason == 'patch' }}"
