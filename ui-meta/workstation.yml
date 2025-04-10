@@ -49,7 +49,7 @@ usage_template: |-
   If configured by your Azimuth administrator, a project filesystem may be mounted at `/project`.
   This filesystem is shared between all platforms deployed in the tenancy with `/project` directory
   support - see the individual platform documentation. **Content stored in this directory will be
-  available to all such platforms, and is retained even when a platform is deleted.*
+  available to all such platforms, and is retained even when a platform is deleted.**
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
 
