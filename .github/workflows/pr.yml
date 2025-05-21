@@ -1,0 +1,26 @@
+---
+    name: Build and test PR
+
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    on:
+      pull_request:
+        types:
+          - opened
+          - synchronize
+          - ready_for_review
+          - reopened
+        branches:
+          - main
+
+    jobs:
+      lint:
+        uses: ./.github/workflows/lint.yml
