@@ -1,3 +1,4 @@
+---
 name: "workstation"
 label: "Linux Workstation"
 description: Linux workstation (Ubuntu 22.04) accessible via a web browser.
@@ -20,7 +21,7 @@ parameters:
   - name: cluster_volume_size
     label: "Data volume size (GB)"
     description: |-
-      The size of the data volume for the workstation.  
+      The size of the data volume for the workstation.
       The data volume will be available at `/data`.
     kind: cloud.volume_size
     default: 10

@@ -7,8 +7,8 @@
 
 - name: Configure project share
   hosts: workstation
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   vars:
     os_manila_mount_shares:
       - share_name: "{{ cluster_project_manila_share_name | default('azimuth-project-share') }}"
@@ -19,7 +19,7 @@
         mount_mode: ugo=rwX
   tasks:
     - name: Configure Manila project share
-      include_role:
+      ansible.builtin.include_role:
         name: stackhpc.os-manila-mount
       when: cluster_project_manila_share | default(false) | bool
 
@@ -27,7 +27,7 @@
   hosts: openstack
   tasks:
     - name: Wait for Monitoring to become available
-      uri:
+      ansible.builtin.uri:
         url: "http://{{ zenith_fqdn_monitoring }}"
         method: GET
         follow_redirects: safe
@@ -44,9 +44,9 @@
       delay: 10
       until: "monitoring_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
-    
+
     - name: Wait for webconsole to become available
-      uri:
+      ansible.builtin.uri:
         url: "http://{{ zenith_fqdn_webconsole }}"
         method: GET
         follow_redirects: safe
@@ -64,10 +64,11 @@
       until: "webconsole_uri is not failed"
       when: (cluster_state | default('present')) == 'present'
 
-# Write the outputs as the final task
-- hosts: localhost
+- name: Write the outputs as the final task
+  hosts: localhost
   tasks:
-    - debug: 
+    - name: Print cluster access ip
+      ansible.builtin.debug:
         var: outputs
       vars:
         fip_address: "{{ hostvars[groups['openstack'][0]].cluster_floating_ip_address }}"
