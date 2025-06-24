@@ -1,0 +1,11 @@
+---
+skip-check:
+  # Requires all urls used with ansible.builtin.uri to be HTTPS
+  # Redirection to HTTPS is handled by the Kubernetes ingress
+  - CKV2_ANSIBLE_1
+  # Requires all blocks to have rescue: - not considered appropriate
+  - CKV2_ANSIBLE_3
+  - CKV2_GHA_1
+skip-path:
+  - vendor/
+  - collections/

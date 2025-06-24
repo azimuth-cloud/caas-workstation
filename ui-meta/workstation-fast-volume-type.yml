@@ -1,3 +1,4 @@
+---
 name: "workstation"
 label: "Linux Workstation"
 description: Linux workstation (Ubuntu 22.04) accessible via a web browser.
@@ -20,19 +21,19 @@ parameters:
   - name: cluster_volume_size
     label: "Data volume size (GB)"
     description: |-
-      The size of the data volume for the workstation.  
+      The size of the data volume for the workstation.
       The data volume will be available at `/data`.
     kind: cloud.volume_size
     default: 10
     options:
       min: 10
     immutable: true
-  
+
   - name: use_cluster_volume_type_fast
     label: Provision high-performance storage for the data volume
     description: |
       If a high-performance storage type is available, use it for for the data
-      volume. If no high-performance storage type is available, this option has 
+      volume. If no high-performance storage type is available, this option has
       no effect and a standard cloud volume will be provisioned for data.
     kind: boolean
     required: false
