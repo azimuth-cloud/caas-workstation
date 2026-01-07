@@ -37,6 +37,12 @@ parameters:
     default: 1
     immutable: true
 
+  - name: appliance_lifetime_hrs
+    kind: integer
+    hidden: true
+    default: 1
+    immutable: true
+
 usage_template: |-
   {% set webconsole = cluster | service("webconsole") %}
   {% set monitoring = cluster | service("monitoring") %}
