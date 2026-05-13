@@ -1,6 +1,6 @@
 #####
 ##### The identity scope we are operating in
-##### Used to add tge OpenStack user name to instance metadata
+##### Used to add the OpenStack user name to instance metadata
 #####
 data "openstack_identity_auth_scope_v3" "scope" {
   name = "{{ cluster_name }}"
