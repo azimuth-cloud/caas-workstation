@@ -70,7 +70,8 @@ usage_template: |-
 
   Monitoring dashboards for the workstation are available using the [Monitoring service]({{ monitoring.url }}).
 
-  Documentation on Workstation features such as EESSI and Podman can be found [here](https://azimuth-cloud.github.io/azimuth-user-docs/platforms/linux-workstation/).
+  Documentation on Workstation features such as EESSI and Podman can be found
+  [here](https://azimuth-cloud.github.io/azimuth-user-docs/platforms/linux-workstation/).
 
 
 services:
