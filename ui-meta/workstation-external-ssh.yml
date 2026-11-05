@@ -1,7 +1,7 @@
 ---
 name: "workstation-external-ssh"
 label: "Linux Workstation (with SSH access)"
-description: Linux workstation (Ubuntu 22.04) accessible via a web browser and by SSH.
+description: Linux workstation (Ubuntu 24.04) accessible via a web browser and by SSH.
 logo: https://raw.githubusercontent.com/azimuth-cloud/caas-workstation/main/assets/tux.png
 
 # Workstations cannot be deployed without an SSH key
@@ -16,7 +16,7 @@ parameters:
     immutable: true
     options:
       min_ram: 4096
-      min_disk: 10
+      min_disk: 15
 
   - name: cluster_floating_ip
     label: External IP for SSH access
