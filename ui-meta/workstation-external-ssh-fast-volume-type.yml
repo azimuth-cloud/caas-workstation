@@ -1,7 +1,7 @@
 ---
 name: "workstation-external-ssh"
 label: "Linux Workstation (with SSH access)"
-description: Linux workstation (Ubuntu 22.04) accessible via a web browser and by SSH.
+description: Linux workstation (Ubuntu 24.04) accessible via a web browser and by SSH.
 logo: https://raw.githubusercontent.com/azimuth-cloud/caas-workstation/main/assets/tux.png
 
 # Workstations cannot be deployed without an SSH key
