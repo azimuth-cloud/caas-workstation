@@ -16,7 +16,7 @@ parameters:
     immutable: true
     options:
       min_ram: 4096
-      min_disk: 10
+      min_disk: 15
 
   - name: cluster_volume_size
     label: "Data volume size (GB)"
